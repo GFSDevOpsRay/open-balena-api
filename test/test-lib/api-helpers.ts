@@ -129,6 +129,22 @@ export const expectResourceToMatch = async <T = AnyObject>(
 	return result!;
 };
 
+export const thatIsDateStringAfter = (dateParam: Date | string | null) => {
+	if (dateParam == null) {
+		throw new Error(
+			`The date ${dateParam} provided to thatIsAfterDateString has to have a value`,
+		);
+	}
+	const date = typeof dateParam === 'string' ? new Date(dateParam) : dateParam;
+	return (prop: Chai.Assertion) =>
+		prop.that.is
+			.a('string')
+			.that.satisfies(
+				(d: string) => new Date(d) > date,
+				`Expected date to be after ${date.toISOString()}`,
+			);
+};
+
 const validJwtProps = [
 	'id',
 	'actor',
